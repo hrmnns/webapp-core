@@ -1,6 +1,7 @@
 // config.js
 window.APP_CONFIG = {
   appTitle: "webapp-core by cherware.de",
+  showBreadcrumb: false, 
 
   pages: {
     "index.html": {

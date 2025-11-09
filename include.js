@@ -56,6 +56,13 @@ function setActiveNavigation() {
 
 /* Breadcrumb */
 function setBreadcrumb() {
+  // Wenn Breadcrumb global deaktiviert → direkt beenden
+  if (window.APP_CONFIG.showBreadcrumb === false) {
+    const breadcrumb = document.getElementById("breadcrumb");
+    if (breadcrumb) breadcrumb.remove();
+    return;
+  }
+
   const current = window.location.pathname.split("/").pop() || "index.html";
   const label = window.APP_CONFIG.pages[current]?.title || current;
 
@@ -64,6 +71,7 @@ function setBreadcrumb() {
     breadcrumb.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
   }
 }
+
 
 /* Dynamischer Header-Titel */
 function setAppTitle() {
