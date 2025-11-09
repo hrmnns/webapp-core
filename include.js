@@ -2,7 +2,7 @@
 
 async function loadComponents() {
   const includeElements = document.querySelectorAll('[data-include]');
-  
+
   await Promise.all(Array.from(includeElements).map(async (element) => {
     const file = element.getAttribute("data-include");
     const response = await fetch(file);
@@ -10,21 +10,22 @@ async function loadComponents() {
     element.innerHTML = html;
   }));
 
-  buildNavigation();      // 1) Navigation erzeugen
-  setActiveNavigation();  // 2) Aktiven Menüpunkt markieren
-  setBreadcrumb();        // 3) Breadcrumb setzen
-  setAppTitle();          // 4) Header-Titel setzen
-  setupMenuToggle();      // 5) Burger-Menu erst jetzt aktivieren
+  buildNavigation();
+  setActiveNavigation();
+  setBreadcrumb();
+  setAppTitle();
+  setupMenuToggle();
 }
 
+/* Dynamische Navigation */
 function buildNavigation() {
   const navContainer = document.getElementById("main-nav");
   if (!navContainer) return;
 
-  navContainer.innerHTML = ""; // leeren
+  navContainer.innerHTML = "";
 
   Object.entries(window.APP_CONFIG.pages).forEach(([file, config]) => {
-    if (!config.showInNav) return;
+    if (config.showInNav === false) return;
 
     const link = document.createElement("a");
     link.href = file;
@@ -34,6 +35,7 @@ function buildNavigation() {
   });
 }
 
+/* Aktiver Menüpunkt */
 function setActiveNavigation() {
   const current = window.location.pathname.split("/").pop() || "index.html";
 
@@ -50,9 +52,9 @@ function setActiveNavigation() {
   });
 }
 
+/* Breadcrumb */
 function setBreadcrumb() {
   const current = window.location.pathname.split("/").pop() || "index.html";
-
   const label = window.APP_CONFIG.pages[current]?.title || current;
 
   const breadcrumb = document.getElementById("breadcrumb");
@@ -61,23 +63,23 @@ function setBreadcrumb() {
   }
 }
 
-function setupMenuToggle() {
-  const button = document.getElementById("menu-toggle");
-  const menu = document.getElementById("main-nav");
-
-  if (!button || !menu) return;
-
-  // iOS Safari benötigt onclick statt addEventListener in manchen Fällen
-  button.onclick = () => {
-    menu.classList.toggle("hidden");
-  };
-}
-
+/* Dynamischer Header-Titel */
 function setAppTitle() {
   const titleElement = document.getElementById("app-title");
   if (titleElement) {
     titleElement.textContent = window.APP_CONFIG.appTitle;
   }
+}
+
+/* Burger-Menü (iPhone-kompatibel) */
+function setupMenuToggle() {
+  const button = document.getElementById("menu-toggle");
+  const menu = document.getElementById("main-nav");
+  if (!button || !menu) return;
+
+  button.onclick = () => {
+    menu.classList.toggle("hidden");
+  };
 }
 
 document.addEventListener("DOMContentLoaded", loadComponents);
