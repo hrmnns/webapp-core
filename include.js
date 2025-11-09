@@ -22,8 +22,11 @@ function setActiveNavigation() {
 
   document.querySelectorAll("#main-nav .nav-link").forEach(link => {
     if (link.getAttribute("href") === current) {
-      link.classList.remove("bg-blue-600", "hover:bg-blue-700");
-      link.classList.add("bg-gray-900", "hover:bg-gray-900");
+      // Zustand für aktive Seite
+      link.classList.add("bg-gray-900", "text-white", "hover:bg-gray-900");
+    } else {
+      // Zustand für nicht-aktive Seiten
+      link.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
     }
   });
 }
@@ -49,11 +52,10 @@ document.addEventListener("DOMContentLoaded", loadComponents);
 // Mobile Menü-Umschaltung
 document.addEventListener("click", (evt) => {
   const button = document.getElementById("menu-toggle");
-  const menu = document.getElementById("menu");
-
-  if (!button || !menu) return;
+  const menu = document.getElementById("main-nav");
 
   if (evt.target === button) {
     menu.classList.toggle("hidden");
   }
 });
+

@@ -1,29 +1,30 @@
-<nav class="bg-white border-b border-gray-200 px-4 py-3">
-  <div class="max-w-4xl mx-auto flex items-center justify-between">
+<nav class="bg-white border-b border-gray-200">
+  <div class="max-w-4xl mx-auto flex items-center justify-between px-4 py-3">
 
-    <!-- Titel / Logo optional -->
+    <!-- Titel -->
     <div class="text-lg font-semibold text-gray-700">
       Navigation
     </div>
 
-    <!-- Burger Button (nur mobil sichtbar) -->
-    <button id="menu-toggle" class="block md:hidden px-3 py-2 border border-gray-300 rounded-lg text-gray-700 hover:bg-gray-100">
+    <!-- Burger Button (sichtbar auf Mobilgeräten) -->
+    <button id="menu-toggle" class="md:hidden text-gray-700 text-2xl px-2 py-1 focus:outline-none">
       ☰
     </button>
+
   </div>
 
-  <!-- Menülinks -->
-  <div id="menu" class="mt-3 flex flex-col gap-2 md:flex md:flex-row md:justify-center md:items-center md:gap-4 hidden md:block">
+  <!-- Menübereich -->
+  <div id="main-nav" class="hidden md:flex flex-col md:flex-row md:justify-center md:gap-3 px-4 pb-3 md:pb-0">
 
-    <a href="index.html" class="nav-link px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition w-full text-center md:w-auto">
+    <a href="index.html" class="nav-link block text-center px-4 py-2 rounded-lg transition">
       Hauptbereich
     </a>
 
-    <a href="sub1.html" class="nav-link px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition w-full text-center md:w-auto">
+    <a href="sub1.html" class="nav-link block text-center px-4 py-2 rounded-lg transition">
       Sub 1
     </a>
 
-    <a href="sub2.html" class="nav-link px-4 py-2 rounded-lg bg-blue-600 text-white hover:bg-blue-700 transition w-full text-center md:w-auto">
+    <a href="sub2.html" class="nav-link block text-center px-4 py-2 rounded-lg transition">
       Sub 2
     </a>
 
