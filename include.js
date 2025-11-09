@@ -31,8 +31,8 @@ function setActiveNavigation() {
 function setBreadcrumb() {
   const map = {
     "index.html": "Hauptbereich",
-    "sub1.html": "Anbieter vs. Betreiber",
-    "sub2.html": "Risiko-Klassifizierung"
+    "sub1.html": "Sub 1",
+    "sub2.html": "Sub 2"
   };
 
   const currentFile = window.location.pathname.split("/").pop() || "index.html";
@@ -40,7 +40,7 @@ function setBreadcrumb() {
 
   const breadcrumb = document.getElementById("breadcrumb");
   if (breadcrumb) {
-    breadcrumb.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
+    breadcrumb.innerHTML = `<span class="text-gray-700 font-medium"> -- ${label} -- </span>`;
   }
 }
 
