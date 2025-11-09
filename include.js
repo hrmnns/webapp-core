@@ -1,38 +1,38 @@
 // include.js
 
-document.addEventListener("DOMContentLoaded", () => {
+async function loadComponents() {
+  const includeElements = document.querySelectorAll('[data-include]');
   
-  // Komponenten einfügen
-  document.querySelectorAll('[data-include]').forEach(async (element) => {
+  const loadPromises = Array.from(includeElements).map(async (element) => {
     const file = element.getAttribute("data-include");
     const response = await fetch(file);
     const html = await response.text();
     element.innerHTML = html;
-
-    // Wenn Navigation geladen wurde → aktive Seite markieren
-    if (file.includes("nav-main.html")) {
-      const current = window.location.pathname.split("/").pop() || "index.html";
-
-      document.querySelectorAll("#main-nav .nav-link").forEach(link => {
-        if (link.getAttribute("href") === current) {
-          link.classList.remove("bg-blue-600", "hover:bg-blue-700");
-          link.classList.add("bg-gray-900", "hover:bg-gray-900");
-        }
-      });
-    }
   });
 
-});
+  // Warten, bis alles geladen ist
+  await Promise.all(loadPromises);
 
+  setActiveNavigation();
+  setBreadcrumb();
+}
 
-// Breadcrumb automatisch setzen, nachdem alle Komponenten eingefügt sind
-document.addEventListener("DOMContentLoaded", () => {
+function setActiveNavigation() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
 
-  // Zuordnung Datei → Klartext-Bezeichnung
+  document.querySelectorAll("#main-nav .nav-link").forEach(link => {
+    if (link.getAttribute("href") === current) {
+      link.classList.remove("bg-blue-600", "hover:bg-blue-700");
+      link.classList.add("bg-gray-900", "hover:bg-gray-900");
+    }
+  });
+}
+
+function setBreadcrumb() {
   const map = {
     "index.html": "Hauptbereich",
-    "sub1.html": "Sub 1",
-    "sub2.html": "Sub 2"
+    "sub1.html": "Anbieter vs. Betreiber",
+    "sub2.html": "Risiko-Klassifizierung"
   };
 
   const currentFile = window.location.pathname.split("/").pop() || "index.html";
@@ -42,5 +42,6 @@ document.addEventListener("DOMContentLoaded", () => {
   if (breadcrumb) {
     breadcrumb.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
   }
+}
 
-});
+document.addEventListener("DOMContentLoaded", loadComponents);
