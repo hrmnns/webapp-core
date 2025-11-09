@@ -32,7 +32,7 @@ function buildNavigation() {
     const link = document.createElement("a");
     link.href = file;
     link.textContent = config.title;
-    link.className = "nav-link block text-center px-4 py-2 rounded-lg transition";
+    link.className = "nav-link block text-center px-5 py-2.5 rounded-xl transition shadow-sm";
     navContainer.appendChild(link);
   });
 }
