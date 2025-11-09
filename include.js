@@ -40,8 +40,20 @@ function setBreadcrumb() {
 
   const breadcrumb = document.getElementById("breadcrumb");
   if (breadcrumb) {
-    breadcrumb.innerHTML = `<span class="text-gray-700 font-medium"> -- ${label} -- </span>`;
+    breadcrumb.innerHTML = `<span class="text-gray-700 font-medium"> -- ${label} --</span>`;
   }
 }
 
 document.addEventListener("DOMContentLoaded", loadComponents);
+
+// Mobile Menü-Umschaltung
+document.addEventListener("click", (evt) => {
+  const button = document.getElementById("menu-toggle");
+  const menu = document.getElementById("menu");
+
+  if (!button || !menu) return;
+
+  if (evt.target === button) {
+    menu.classList.toggle("hidden");
+  }
+});
