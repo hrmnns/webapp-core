@@ -10,6 +10,7 @@ async function loadComponents() {
     element.innerHTML = html;
   }));
 
+  setAppTitle();
   setActiveNavigation();
   setBreadcrumb();
   setupMenuToggle();
@@ -19,9 +20,11 @@ function setActiveNavigation() {
   const current = window.location.pathname.split("/").pop() || "index.html";
 
   document.querySelectorAll("#main-nav .nav-link").forEach(link => {
-    const isActive = link.getAttribute("href") === current;
+    const href = link.getAttribute("href");
+    const page = window.APP_CONFIG.pages[href];
+    if (page) link.textContent = page.title; // <-- Beschriftung aus config.js
 
-    // Einheitliche Basis
+    const isActive = href === current;
     link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
 
     if (isActive) {
@@ -33,14 +36,9 @@ function setActiveNavigation() {
 }
 
 function setBreadcrumb() {
-  const map = {
-    "index.html": "Hauptbereich",
-    "sub1.html": "Anbieter vs. Betreiber",
-    "sub2.html": "Risiko-Klassifizierung"
-  };
-
   const current = window.location.pathname.split("/").pop() || "index.html";
-  const label = map[current] || current;
+
+  const label = window.APP_CONFIG.pages[current]?.title || current;
 
   const breadcrumb = document.getElementById("breadcrumb");
   if (breadcrumb) {
@@ -56,6 +54,13 @@ function setupMenuToggle() {
   button.addEventListener("click", () => {
     menu.classList.toggle("hidden");
   });
+}
+
+function setAppTitle() {
+  const titleElement = document.getElementById("app-title");
+  if (titleElement) {
+    titleElement.textContent = window.APP_CONFIG.appTitle;
+  }
 }
 
 document.addEventListener("DOMContentLoaded", loadComponents);
