@@ -14,6 +14,8 @@ async function loadComponents() {
   setActiveNavigation();
   setBreadcrumb();
   setAppTitle();
+  setPageTitle(); 
+  setVisiblePageTitle();
   setupMenuToggle();
 }
 
@@ -69,6 +71,22 @@ function setAppTitle() {
   if (titleElement) {
     titleElement.textContent = window.APP_CONFIG.appTitle;
   }
+}
+
+/* Browser-Tab Titel dynamisch setzen */
+function setPageTitle() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  const appName = window.APP_CONFIG.appTitle;
+  const pageName = window.APP_CONFIG.pages[current]?.title || current;
+
+  document.title = `${pageName} – ${appName}`;
+}
+
+function setVisiblePageTitle() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  const label = window.APP_CONFIG.pages[current]?.title;
+  const el = document.getElementById("page-title");
+  if (el && label) el.textContent = label;
 }
 
 /* Burger-Menü (iPhone-kompatibel) */
