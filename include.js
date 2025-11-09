@@ -3,13 +3,18 @@
 async function loadComponents() {
   const includeElements = document.querySelectorAll('[data-include]');
   
-  await Promise.all(loadPromises);
-  
-  buildNavigation();      // <--- NEU
-  setActiveNavigation();
-  setBreadcrumb();
-  setAppTitle();
-  setupMenuToggle();
+  await Promise.all(Array.from(includeElements).map(async (element) => {
+    const file = element.getAttribute("data-include");
+    const response = await fetch(file);
+    const html = await response.text();
+    element.innerHTML = html;
+  }));
+
+  buildNavigation();      // 1) Navigation erzeugen
+  setActiveNavigation();  // 2) Aktiven Menüpunkt markieren
+  setBreadcrumb();        // 3) Breadcrumb setzen
+  setAppTitle();          // 4) Header-Titel setzen
+  setupMenuToggle();      // 5) Burger-Menu erst jetzt aktivieren
 }
 
 function buildNavigation() {
@@ -59,11 +64,13 @@ function setBreadcrumb() {
 function setupMenuToggle() {
   const button = document.getElementById("menu-toggle");
   const menu = document.getElementById("main-nav");
+
   if (!button || !menu) return;
 
-  button.addEventListener("click", () => {
+  // iOS Safari benötigt onclick statt addEventListener in manchen Fällen
+  button.onclick = () => {
     menu.classList.toggle("hidden");
-  });
+  };
 }
 
 function setAppTitle() {
