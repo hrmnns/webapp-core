@@ -3,17 +3,22 @@
 <head>
   <meta charset="UTF-8">
   <title>Hauptbereich</title>
-  <link rel="stylesheet" href="style.css">
+
+  <!-- Tailwind CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+
   <script src="include.js" defer></script>
 </head>
-<body>
+<body class="bg-gray-50 text-gray-800">
 
 <div data-include="components/header.html"></div>
 <div data-include="components/nav-main.html"></div>
 
-<main>
-  <h2>Start</h2>
-  <p>Add content here ...</p>
+<main class="max-w-3xl mx-auto bg-white border border-gray-200 rounded-xl p-6 mt-8 shadow-sm">
+  <h2 class="text-xl font-semibold mb-3">Einführung</h2>
+  <p class="leading-relaxed text-gray-700">
+    Add content here ...
+  </p>
 </main>
 
 <div data-include="components/footer.html"></div>
