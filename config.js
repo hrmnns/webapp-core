@@ -1,6 +1,6 @@
 // config.js
 window.APP_CONFIG = {
-  appTitle: "EU AI Act Web-App",
+  appTitle: "webapp-core by cherware.de",
 
   pages: {
     "index.html": {
