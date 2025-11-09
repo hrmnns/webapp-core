@@ -3,28 +3,38 @@
 async function loadComponents() {
   const includeElements = document.querySelectorAll('[data-include]');
   
-  await Promise.all(Array.from(includeElements).map(async (element) => {
-    const file = element.getAttribute("data-include");
-    const response = await fetch(file);
-    const html = await response.text();
-    element.innerHTML = html;
-  }));
-
-  setAppTitle();
+  await Promise.all(loadPromises);
+  
+  buildNavigation();      // <--- NEU
   setActiveNavigation();
   setBreadcrumb();
+  setAppTitle();
   setupMenuToggle();
+}
+
+function buildNavigation() {
+  const navContainer = document.getElementById("main-nav");
+  if (!navContainer) return;
+
+  navContainer.innerHTML = ""; // leeren
+
+  Object.entries(window.APP_CONFIG.pages).forEach(([file, config]) => {
+    if (!config.showInNav) return;
+
+    const link = document.createElement("a");
+    link.href = file;
+    link.textContent = config.title;
+    link.className = "nav-link block text-center px-4 py-2 rounded-lg transition";
+    navContainer.appendChild(link);
+  });
 }
 
 function setActiveNavigation() {
   const current = window.location.pathname.split("/").pop() || "index.html";
 
   document.querySelectorAll("#main-nav .nav-link").forEach(link => {
-    const href = link.getAttribute("href");
-    const page = window.APP_CONFIG.pages[href];
-    if (page) link.textContent = page.title; // <-- Beschriftung aus config.js
+    const isActive = link.getAttribute("href") === current;
 
-    const isActive = href === current;
     link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
 
     if (isActive) {
