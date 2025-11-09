@@ -2,28 +2,21 @@
 <html lang="de">
 <head>
   <meta charset="UTF-8">
-  <title>Anbieter vs. Betreiber Tool</title>
+  <title>Anbieter vs. Betreiber</title>
   <link rel="stylesheet" href="style.css">
-  <script src="app.js" defer></script>
+  <script src="include.js" defer></script>
 </head>
 <body>
 
-<header>
-  <h1>TSub 1</h1>
-  <p>Unterbereich 1</p>
-</header>
+<div data-include="components/header.html"></div>
+<div data-include="components/nav-main.html"></div>
 
 <main>
+  <h2>Sub 1</h2>
   <p>Add content here ...</p>
-
-  <nav>
-    <a href="index.html">Zurück zum Hauptbereich</a>
-  </nav>
 </main>
 
-<footer>
-  created by cherware.de, 2025
-</footer>
+<div data-include="components/footer.html"></div>
 
 </body>
 </html>
