@@ -58,8 +58,16 @@ function applyDesktopMenuVisibility() {
   const show = window.APP_CONFIG.enableMenu !== false;
   const desktop = document.getElementById("desktop-nav");
   if (!desktop) return;
-  desktop.classList.toggle("hidden", !show);
+
+  if (show) {
+    desktop.classList.remove("hidden");
+    desktop.classList.add("flex");   // aktiv sichtbar
+  } else {
+    desktop.classList.add("hidden");
+    desktop.classList.remove("flex"); // vollständig weg
+  }
 }
+
 
 /* ---------------------------
    Mobile-Menü-Steuerung
