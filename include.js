@@ -12,7 +12,7 @@ async function loadComponents() {
   buildNavigation();
   applyDesktopMenuVisibility();
   applyMobileMenuVisibility();
-
+  applyBackButtonVisibility();
   setActiveNavigation();
   setBreadcrumb();
   setAppTitle();
@@ -91,6 +91,20 @@ function applyMobileMenuVisibility() {
   }
 }
 
+function applyBackButtonVisibility() {
+  const showMenu = window.APP_CONFIG.enableMenu !== false;
+  const backBtn = document.getElementById("back-button");
+  if (!backBtn) return;
+
+  if (!showMenu) {
+    // Menü ist aus → Zurück-Button einblenden
+    backBtn.classList.remove("hidden");
+  } else {
+    // Menü ist an → Zurück-Button ausblenden
+    backBtn.classList.add("hidden");
+  }
+}
+
 /* ---------------------------
    Aktiven Link hervorheben
 ---------------------------- */
@@ -99,12 +113,12 @@ function setActiveNavigation() {
 
   document.querySelectorAll("#desktop-nav a, #mobile-nav a").forEach(link => {
     const active = link.getAttribute("href") === current;
-    link.classList.remove("bg-blue-600","bg-gray-900","text-white","hover:bg-blue-700","hover:bg-gray-900");
+    link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
 
     if (active) {
-      link.classList.add("bg-gray-900","text-white","hover:bg-gray-900");
+      link.classList.add("bg-gray-900", "text-white", "hover:bg-gray-900");
     } else {
-      link.classList.add("bg-blue-600","text-white","hover:bg-blue-700");
+      link.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
     }
   });
 }

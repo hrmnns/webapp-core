@@ -1,14 +1,33 @@
-<header class="bg-white border-b border-gray-200">
+<header class="relative bg-white border-b border-gray-200">
   <div class="max-w-4xl mx-auto flex items-center gap-3 px-4 py-4">
+
+    <!-- App-Icon (führt immer zur Startseite zurück) -->
     <a href="index.html" class="shrink-0 inline-flex items-center" aria-label="Zur Startseite">
-      <img src="https://www.cherware.de/wp-content/uploads/2025/09/cropped-iconme03.png" alt="App-Icon"
-        class="w-10 h-10 rounded" />
+      <img src="https://www.cherware.de/wp-content/uploads/2025/09/cropped-iconme03.png"
+           alt="App-Icon"
+           class="w-10 h-10 rounded shadow-sm object-cover" />
     </a>
+
+    <!-- Titelbereich -->
     <div class="min-w-0">
-      <h1 id="app-title" class="text-xl sm:text-2xl font-semibold text-gray-800 truncate">App Title</h1>
+      <h1 id="app-title" class="text-xl sm:text-2xl font-semibold text-gray-800 truncate">
+        App Title
+      </h1>
+
       <p class="text-xs text-gray-500">
-        <a href="https://www.cherware.de" class="hover:underline">created by cherware.de</a>
+        <a href="https://www.cherware.de" class="hover:underline">
+          created by cherware.de
+        </a>
       </p>
     </div>
+
   </div>
+
+  <!-- Zurück-Button (wird dynamisch ein/ausgeblendet) -->
+  <a id="back-button"
+     href="index.html"
+     class="hidden absolute right-4 top-4 text-sm px-3 py-1.5 rounded-lg border border-gray-300 text-gray-600 hover:bg-gray-200 transition">
+    ← Zurück
+  </a>
+
 </header>
