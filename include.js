@@ -38,18 +38,22 @@ function buildNavigation() {
   Object.entries(cfg.pages).forEach(([file, page]) => {
     if (page.showInNav === false) return;
 
-    // Desktop
+    // Desktop-Button
     const d = document.createElement("a");
     d.href = file;
     d.textContent = page.title;
-    d.className = "block px-5 py-2.5 rounded-xl shadow-sm transition text-white bg-blue-600 hover:bg-blue-700";
+    d.className = "nav-link block px-5 py-2.5 rounded-xl shadow-sm transition";
     desktop.appendChild(d);
 
-    // Mobile
+    // Mobile-Button: sauber duplizieren
     const m = d.cloneNode(true);
     mobile.appendChild(m);
   });
+
+  /* Sicherheitsnetz: falls irgendwer doch ein Bild reinmogelt → entfernen */
+  mobile.querySelectorAll("img").forEach(img => img.remove());
 }
+
 
 /* ---------------------------
    Desktop-Menü-Steuerung
