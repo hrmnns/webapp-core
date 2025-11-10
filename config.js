@@ -1,21 +1,10 @@
-// config.js
 window.APP_CONFIG = {
-  appTitle: "webapp-core by cherware.de",
-  showBreadcrumb: false, 
-  showMobileMenu: true,
-
+  appTitle: "webapp-core",
+  enableBurgerMenu: true,        // << hier kannst du das Burger-Menü global an/aus schalten
+  showBreadcrumb: false,         // Breadcrumb global
   pages: {
-    "index.html": {
-      title: "Hauptbereich",
-      showInNav: true
-    },
-    "sub1.html": {
-      title: "Sub 1",
-      showInNav: true
-    },
-    "sub2.html": {
-      title: "Sub 2",
-      showInNav: true
-    }
+    "index.html": { title: "Hauptbereich", showInNav: true },
+    "sub1.html": { title: "Sub 1", showInNav: true },
+    "sub2.html": { title: "Sub 2", showInNav: true }
   }
 };

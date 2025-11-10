@@ -1,114 +1,117 @@
-// include.js  — robuste Reihenfolge, Guard-Checks, keine Abhängigkeiten auf Hoisting
-
-/* ===== Helper-Funktionen ===== */
-
-function buildNavigation() {
-  const cfg = window.APP_CONFIG;
-  const nav = document.getElementById("main-nav");
-  if (!cfg || !cfg.pages || !nav) return;
-
-  nav.innerHTML = "";
-  Object.entries(cfg.pages).forEach(([file, page]) => {
-    if (page.showInNav === false) return;
-    const a = document.createElement("a");
-    a.href = file;
-    a.textContent = page.title || file;
-    a.className = "nav-link block text-center px-5 py-2.5 rounded-xl transition shadow-sm";
-    nav.appendChild(a);
-  });
-}
-
-function applyMobileMenuVisibility() {
-  const cfg = window.APP_CONFIG;
-  const mobileHeader = document.getElementById("mobile-nav-header");
-  const nav = document.getElementById("main-nav");
-
-  if (!cfg || !mobileHeader || !nav) return;
-
-  if (cfg.showMobileMenu === false) {
-    mobileHeader.classList.add("hidden");
-    nav.classList.remove("hidden");    // Navigation immer sichtbar
-    nav.classList.add("md:flex");      // Desktop-Stil behalten
-  }
-}
-
-
-function setActiveNavigation() {
-  const current = window.location.pathname.split("/").pop() || "index.html";
-  document.querySelectorAll("#main-nav .nav-link").forEach(link => {
-    const isActive = link.getAttribute("href") === current;
-    link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
-    if (isActive) {
-      link.classList.add("bg-gray-900", "text-white", "hover:bg-gray-900");
-    } else {
-      link.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
-    }
-  });
-}
-
-function setBreadcrumb() {
-  const cfg = window.APP_CONFIG;
-  const bc = document.getElementById("breadcrumb");
-  if (!bc) return;
-  if (cfg && cfg.showBreadcrumb === false) {
-    bc.remove();
-    return;
-  }
-  const current = window.location.pathname.split("/").pop() || "index.html";
-  const label = (cfg && cfg.pages && cfg.pages[current] && cfg.pages[current].title) || current;
-  bc.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
-}
-
-function setAppTitle() {
-  const el = document.getElementById("app-title");
-  const cfg = window.APP_CONFIG;
-  if (el && cfg && cfg.appTitle) el.textContent = cfg.appTitle;
-}
-
-function setVisiblePageTitle() {
-  const el = document.getElementById("page-title");
-  const cfg = window.APP_CONFIG;
-  if (!el || !cfg || !cfg.pages) return;
-  const current = window.location.pathname.split("/").pop() || "index.html";
-  const label = cfg.pages[current] && cfg.pages[current].title;
-  if (label) el.textContent = label;
-}
-
-function setPageTitle() {
-  const cfg = window.APP_CONFIG;
-  if (!cfg) return;
-  const current = window.location.pathname.split("/").pop() || "index.html";
-  const pageName = (cfg.pages && cfg.pages[current] && cfg.pages[current].title) || current;
-  const appName = cfg.appTitle || document.title || "App";
-  document.title = `${pageName} – ${appName}`;
-}
-
-function setupMenuToggle() {
-  const btn = document.getElementById("menu-toggle");
-  const menu = document.getElementById("main-nav");
-  if (!btn || !menu) return;
-  btn.onclick = () => menu.classList.toggle("hidden");
-}
-
-/* ===== Bootstrap: Komponenten laden und erst dann UI aufbauen ===== */
+document.addEventListener("DOMContentLoaded", loadComponents);
 
 async function loadComponents() {
-  const nodes = document.querySelectorAll("[data-include]");
-  await Promise.all(Array.from(nodes).map(async (n) => {
-    const file = n.getAttribute("data-include");
+  const includeEls = document.querySelectorAll('[data-include]');
+  await Promise.all(Array.from(includeEls).map(async el => {
+    const file = el.getAttribute("data-include");
     const res = await fetch(file);
-    n.innerHTML = await res.text();
+    el.innerHTML = await res.text();
   }));
 
-  // Ab hier existieren Header/Nav/Footer im DOM
   buildNavigation();
-  applyMobileMenuVisibility();
+  applyBurgerConfig();
   setActiveNavigation();
   setBreadcrumb();
   setAppTitle();
   setVisiblePageTitle();
-  setPageTitle();
+  setTabTitle();
   setupMenuToggle();
 }
 
-document.addEventListener("DOMContentLoaded", loadComponents);
+/* Navigation dynamisch aus config */
+function buildNavigation() {
+  const nav = document.getElementById("main-nav");
+  if (!nav || !window.APP_CONFIG?.pages) return;
+
+  nav.innerHTML = ""; // sauber starten
+
+  Object.entries(window.APP_CONFIG.pages).forEach(([file, cfg]) => {
+    if (cfg.showInNav === false) return;
+    const a = document.createElement("a");
+    a.href = file;
+    a.textContent = cfg.title;
+    a.className = "nav-link block text-center px-6 py-3 rounded-2xl transition shadow";
+    nav.appendChild(a);
+  });
+
+  // Sicherheitsnetz: Falls hier dennoch Bilder landen, entfernen.
+  nav.querySelectorAll("img").forEach(img => img.remove());
+}
+
+/* Aktiver Link Style */
+function setActiveNavigation() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  document.querySelectorAll("#main-nav .nav-link").forEach(link => {
+    const active = link.getAttribute("href") === current;
+    link.classList.remove("bg-blue-600","bg-gray-900","text-white","hover:bg-blue-700","hover:bg-gray-900");
+    if (active) link.classList.add("bg-gray-900","text-white","hover:bg-gray-900");
+    else        link.classList.add("bg-blue-600","text-white","hover:bg-blue-700");
+  });
+}
+
+/* Breadcrumb */
+function setBreadcrumb() {
+  if (window.APP_CONFIG?.showBreadcrumb === false) {
+    const bc = document.getElementById("breadcrumb");
+    if (bc) bc.remove();
+    return;
+  }
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  const label = window.APP_CONFIG?.pages?.[current]?.title || current;
+  const el = document.getElementById("breadcrumb");
+  if (el) el.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
+}
+
+/* Sichtbare Titel */
+function setAppTitle() {
+  const el = document.getElementById("app-title");
+  if (el) el.textContent = window.APP_CONFIG?.appTitle || document.title || "Web-App";
+}
+
+function setVisiblePageTitle() {
+  const el = document.getElementById("page-title");
+  if (!el) return;
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  const label = window.APP_CONFIG?.pages?.[current]?.title || current;
+  el.textContent = label;
+}
+
+/* Tab-Titel */
+function setTabTitle() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  const app = window.APP_CONFIG?.appTitle || "Web-App";
+  const page = window.APP_CONFIG?.pages?.[current]?.title || current;
+  document.title = `${page} – ${app}`;
+}
+
+/* Burger-Config anwenden */
+function applyBurgerConfig() {
+  const enabled = window.APP_CONFIG?.enableBurgerMenu !== false; // default: an
+  const btn = document.getElementById("menu-toggle");
+  const nav = document.getElementById("main-nav");
+  if (!btn || !nav) return;
+
+  if (!enabled) {
+    // Burger-Button verstecken, Menü immer sichtbar machen
+    btn.classList.add("hidden");
+    nav.classList.remove("hidden");
+  } else {
+    // Standard: mobil hidden, Desktop sichtbar (md:flex in HTML vorhanden)
+    btn.classList.remove("hidden");
+    // auf kleinen Screens initial einklappen
+    if (window.matchMedia("(max-width: 767px)").matches) nav.classList.add("hidden");
+  }
+}
+
+/* Burger-Interaktion */
+function setupMenuToggle() {
+  const btn = document.getElementById("menu-toggle");
+  const nav = document.getElementById("main-nav");
+  if (!btn || !nav) return;
+
+  btn.addEventListener("click", () => {
+    const expanded = btn.getAttribute("aria-expanded") === "true";
+    btn.setAttribute("aria-expanded", expanded ? "false" : "true");
+    nav.classList.toggle("hidden");
+  });
+}
