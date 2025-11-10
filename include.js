@@ -16,6 +16,7 @@ async function loadComponents() {
   setVisiblePageTitle();
   setTabTitle();
   setupMenuToggle();
+  buildTableOfContents();  
 }
 
 /* Navigation dynamisch aus config */
@@ -43,9 +44,9 @@ function setActiveNavigation() {
   const current = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("#main-nav .nav-link").forEach(link => {
     const active = link.getAttribute("href") === current;
-    link.classList.remove("bg-blue-600","bg-gray-900","text-white","hover:bg-blue-700","hover:bg-gray-900");
-    if (active) link.classList.add("bg-gray-900","text-white","hover:bg-gray-900");
-    else        link.classList.add("bg-blue-600","text-white","hover:bg-blue-700");
+    link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
+    if (active) link.classList.add("bg-gray-900", "text-white", "hover:bg-gray-900");
+    else link.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
   });
 }
 
@@ -115,3 +116,31 @@ function setupMenuToggle() {
     nav.classList.toggle("hidden");
   });
 }
+
+function buildTableOfContents() {
+  const cfg = window.APP_CONFIG;
+  const toc = document.getElementById("toc");
+  if (!cfg || !cfg.pages || !toc) return;
+
+  toc.innerHTML = `
+    <h2 class="text-lg font-semibold text-gray-800 mb-3">Bereiche</h2>
+    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4"></div>
+  `;
+
+  const grid = toc.querySelector("div.grid");
+
+  Object.entries(cfg.pages).forEach(([file, page]) => {
+    if (file === "index.html" || page.showInNav === false) return;
+
+    const card = document.createElement("a");
+    card.href = file;
+    card.className =
+      "block bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition hover:border-gray-300";
+    card.innerHTML = `
+      <div class="text-gray-800 font-medium">${page.title}</div>
+      <div class="text-sm text-gray-500 mt-1">Weiter zum Bereich</div>
+    `;
+    grid.appendChild(card);
+  });
+}
+
