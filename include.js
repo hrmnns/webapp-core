@@ -9,8 +9,9 @@ async function loadComponents() {
   }));
 
   buildNavigation();
-  applyBurgerConfig();
-  applyMenuVisibility();
+  applyMenuVisibility();   // <--- zuerst prüfen, ob Menü generell aus!
+  applyBurgerConfig();     // <--- nur anwenden, wenn Menü überhaupt aktiv ist
+
   setActiveNavigation();
   setBreadcrumb();
   setAppTitle();
@@ -112,16 +113,15 @@ function applyMenuVisibility() {
   const mobileHeader = document.getElementById("mobile-nav-header");
   const burger = document.getElementById("menu-toggle");
 
-  if (!nav || !mobileHeader || !burger || !cfg) return;
+  if (!cfg || !nav || !mobileHeader || !burger) return;
 
+  // Wenn Menü global deaktiviert ist → alles entfernen
   if (cfg.enableMenu === false) {
-    // Menü komplett ausblenden (mobil + desktop)
     nav.classList.add("hidden");
     mobileHeader.classList.add("hidden");
     burger.classList.add("hidden");
   }
 }
-
 
 /* Burger-Interaktion */
 function setupMenuToggle() {
