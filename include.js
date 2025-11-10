@@ -2,8 +2,7 @@
 
 async function loadComponents() {
   const includeElements = document.querySelectorAll('[data-include]');
-  
-  // 1) Komponenten vollständig laden
+
   await Promise.all(Array.from(includeElements).map(async (element) => {
     const file = element.getAttribute("data-include");
     const response = await fetch(file);
@@ -11,12 +10,11 @@ async function loadComponents() {
     element.innerHTML = html;
   }));
 
-  // 2) Erst jetzt arbeiten wir mit dem Header & Navigation
   buildNavigation();
   setActiveNavigation();
   setBreadcrumb();
-  setAppTitle();          // <--- jetzt richtig platziert
-  setVisiblePageTitle();  // <--- jetzt richtig platziert
+  setAppTitle();
+  setVisiblePageTitle();
   setupMenuToggle();
 }
 
@@ -57,10 +55,9 @@ function setActiveNavigation() {
 
 /* Breadcrumb */
 function setBreadcrumb() {
-  // Wenn Breadcrumb global deaktiviert → direkt beenden
   if (window.APP_CONFIG.showBreadcrumb === false) {
-    const breadcrumb = document.getElementById("breadcrumb");
-    if (breadcrumb) breadcrumb.remove();
+    const bc = document.getElementById("breadcrumb");
+    if (bc) bc.remove();
     return;
   }
 
@@ -72,25 +69,14 @@ function setBreadcrumb() {
     breadcrumb.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
   }
 }
--
 
-/* Dynamischer Header-Titel */
+/* App-Titel */
 function setAppTitle() {
-  const titleElement = document.getElementById("app-title");
-  if (titleElement) {
-    titleElement.textContent = window.APP_CONFIG.appTitle;
-  }
+  const el = document.getElementById("app-title");
+  if (el) el.textContent = window.APP_CONFIG.appTitle;
 }
 
-/* Browser-Tab Titel dynamisch setzen */
-function setPageTitle() {
-  const current = window.location.pathname.split("/").pop() || "index.html";
-  const appName = window.APP_CONFIG.appTitle;
-  const pageName = window.APP_CONFIG.pages[current]?.title || current;
-
-  document.title = `${pageName} – ${appName}`;
-}
-
+/* Seiten-Titel */
 function setVisiblePageTitle() {
   const current = window.location.pathname.split("/").pop() || "index.html";
   const label = window.APP_CONFIG.pages[current]?.title;
@@ -98,7 +84,15 @@ function setVisiblePageTitle() {
   if (el && label) el.textContent = label;
 }
 
-/* Burger-Menü (iPhone-kompatibel) */
+/* Browser-Tab Titel */
+function setPageTitle() {
+  const current = window.location.pathname.split("/").pop() || "index.html";
+  const appName = window.APP_CONFIG.appTitle;
+  const pageName = window.APP_CONFIG.pages[current]?.title || current;
+  document.title = `${pageName} – ${appName}`;
+}
+
+/* Burger-Menü */
 function setupMenuToggle() {
   const button = document.getElementById("menu-toggle");
   const menu = document.getElementById("main-nav");
