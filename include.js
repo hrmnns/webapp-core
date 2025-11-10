@@ -18,15 +18,30 @@ function buildNavigation() {
   });
 }
 
+function applyMobileMenuVisibility() {
+  const cfg = window.APP_CONFIG;
+  const mobileHeader = document.getElementById("mobile-nav-header");
+  const nav = document.getElementById("main-nav");
+
+  if (!cfg || !mobileHeader || !nav) return;
+
+  if (cfg.showMobileMenu === false) {
+    mobileHeader.classList.add("hidden");
+    nav.classList.remove("hidden");    // Navigation immer sichtbar
+    nav.classList.add("md:flex");      // Desktop-Stil behalten
+  }
+}
+
+
 function setActiveNavigation() {
   const current = window.location.pathname.split("/").pop() || "index.html";
   document.querySelectorAll("#main-nav .nav-link").forEach(link => {
     const isActive = link.getAttribute("href") === current;
-    link.classList.remove("bg-blue-600","bg-gray-900","text-white","hover:bg-blue-700","hover:bg-gray-900");
+    link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
     if (isActive) {
-      link.classList.add("bg-gray-900","text-white","hover:bg-gray-900");
+      link.classList.add("bg-gray-900", "text-white", "hover:bg-gray-900");
     } else {
-      link.classList.add("bg-blue-600","text-white","hover:bg-blue-700");
+      link.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
     }
   });
 }
@@ -87,6 +102,7 @@ async function loadComponents() {
 
   // Ab hier existieren Header/Nav/Footer im DOM
   buildNavigation();
+  applyMobileMenuVisibility();
   setActiveNavigation();
   setBreadcrumb();
   setAppTitle();

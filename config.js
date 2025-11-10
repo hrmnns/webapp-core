@@ -2,6 +2,7 @@
 window.APP_CONFIG = {
   appTitle: "webapp-core by cherware.de",
   showBreadcrumb: false, 
+  showMobileMenu: true,
 
   pages: {
     "index.html": {
