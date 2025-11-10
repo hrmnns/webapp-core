@@ -16,7 +16,7 @@ async function loadComponents() {
   setVisiblePageTitle();
   setTabTitle();
   setupMenuToggle();
-  buildTableOfContents();  
+  buildTableOfContents();
 }
 
 /* Navigation dynamisch aus config */
@@ -31,7 +31,9 @@ function buildNavigation() {
     const a = document.createElement("a");
     a.href = file;
     a.textContent = cfg.title;
-    a.className = "nav-link block text-center px-6 py-3 rounded-2xl transition shadow";
+    card.className =
+      "block rounded-xl p-4 shadow-sm transition border border-gray-100 bg-gray-100 hover:bg-gray-200 hover:shadow-md";
+
     nav.appendChild(a);
   });
 
