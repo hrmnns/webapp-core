@@ -1,17 +1,21 @@
 <header class="bg-white border-b border-gray-300 py-4 px-4">
-  <div class="max-w-4xl mx-auto flex items-center gap-3">
+  <div class="max-w-4xl mx-auto flex items-center gap-4">
 
-    <img 
-      src="https://www.cherware.de/wp-content/uploads/2025/09/cropped-iconme03.png" 
-      alt="cherware Logo" 
-      class="w-12 h-12 rounded-lg shadow-sm object-cover"
-    >
+    <!-- Icon als Link zurück zur Startseite -->
+    <a href="index.html" class="flex-shrink-0">
+      <img 
+        src="https://www.cherware.de/wp-content/uploads/2025/09/cropped-iconme03.png" 
+        alt="cherware Logo" 
+        class="w-12 h-12 rounded-lg shadow-sm object-cover"
+      >
+    </a>
 
-    <div>
-      <h1 id="page-title" class="text-xl font-semibold text-gray-800"></h1>
-      <p class="text-sm text-gray-500">
-        <a href="https://www.cherware.de" class="hover:underline">created by cherware.de</a>
-      </p>
+    <div class="flex flex-col">
+      <!-- App-Titel (oben, immer gleich) -->
+      <h1 id="app-title" class="text-lg font-semibold text-gray-800"></h1>
+
+      <!-- Seiten-Titel (unten, weicher, dynamisch) -->
+      <div id="page-title" class="text-sm text-gray-600"></div>
     </div>
 
   </div>

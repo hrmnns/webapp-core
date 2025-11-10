@@ -71,7 +71,7 @@ function setBreadcrumb() {
     breadcrumb.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
   }
 }
-
+-
 
 /* Dynamischer Header-Titel */
 function setAppTitle() {
