@@ -31,8 +31,7 @@ function buildNavigation() {
     const a = document.createElement("a");
     a.href = file;
     a.textContent = cfg.title;
-    card.className =
-      "block rounded-xl p-4 shadow-sm transition border border-gray-100 bg-gray-100 hover:bg-gray-200 hover:shadow-md";
+    a.className = "nav-link block text-center px-6 py-3 rounded-2xl transition shadow";
 
     nav.appendChild(a);
   });
@@ -137,7 +136,8 @@ function buildTableOfContents() {
     const card = document.createElement("a");
     card.href = file;
     card.className =
-      "block bg-white border border-gray-200 rounded-xl p-4 shadow-sm hover:shadow-md transition hover:border-gray-300";
+      "block rounded-xl p-4 shadow-sm transition border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:shadow-md";
+
     card.innerHTML = `
       <div class="text-gray-800 font-medium">${page.title}</div>
       <div class="text-sm text-gray-500 mt-1">Weiter zum Bereich</div>
