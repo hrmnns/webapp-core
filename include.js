@@ -2,6 +2,7 @@ document.addEventListener("DOMContentLoaded", loadComponents);
 
 async function loadComponents() {
   const includeEls = document.querySelectorAll('[data-include]');
+
   await Promise.all(Array.from(includeEls).map(async el => {
     const file = el.getAttribute("data-include");
     const res = await fetch(file);
@@ -9,8 +10,8 @@ async function loadComponents() {
   }));
 
   buildNavigation();
-  applyMenuVisibility();   // <--- zuerst prüfen, ob Menü generell aus!
-  applyBurgerConfig();     // <--- nur anwenden, wenn Menü überhaupt aktiv ist
+  applyDesktopMenuVisibility();
+  applyMobileMenuVisibility();
 
   setActiveNavigation();
   setBreadcrumb();
@@ -18,128 +19,146 @@ async function loadComponents() {
   setVisiblePageTitle();
   setTabTitle();
   setupMenuToggle();
-  buildTableOfContents();
+  buildTableOfContents(); // optional TOC
 }
 
-/* Navigation dynamisch aus config */
+/* ---------------------------
+   Navigation dynamisch bauen
+---------------------------- */
 function buildNavigation() {
-  const nav = document.getElementById("main-nav");
-  if (!nav || !window.APP_CONFIG?.pages) return;
+  const cfg = window.APP_CONFIG;
+  const desktop = document.getElementById("desktop-nav");
+  const mobile = document.getElementById("mobile-nav");
 
-  nav.innerHTML = ""; // sauber starten
+  if (!cfg || !cfg.pages || !desktop || !mobile) return;
 
-  Object.entries(window.APP_CONFIG.pages).forEach(([file, cfg]) => {
-    if (cfg.showInNav === false) return;
-    const a = document.createElement("a");
-    a.href = file;
-    a.textContent = cfg.title;
-    a.className = "nav-link block text-center px-6 py-3 rounded-2xl transition shadow";
+  desktop.innerHTML = "";
+  mobile.innerHTML = "";
 
-    nav.appendChild(a);
+  Object.entries(cfg.pages).forEach(([file, page]) => {
+    if (page.showInNav === false) return;
+
+    // Desktop
+    const d = document.createElement("a");
+    d.href = file;
+    d.textContent = page.title;
+    d.className = "block px-5 py-2.5 rounded-xl shadow-sm transition text-white bg-blue-600 hover:bg-blue-700";
+    desktop.appendChild(d);
+
+    // Mobile
+    const m = d.cloneNode(true);
+    mobile.appendChild(m);
   });
-
-  // Sicherheitsnetz: Falls hier dennoch Bilder landen, entfernen.
-  nav.querySelectorAll("img").forEach(img => img.remove());
 }
 
-/* Aktiver Link Style */
+/* ---------------------------
+   Desktop-Menü-Steuerung
+---------------------------- */
+function applyDesktopMenuVisibility() {
+  const show = window.APP_CONFIG.enableMenu !== false;
+  const desktop = document.getElementById("desktop-nav");
+  if (!desktop) return;
+  desktop.classList.toggle("hidden", !show);
+}
+
+/* ---------------------------
+   Mobile-Menü-Steuerung
+---------------------------- */
+function applyMobileMenuVisibility() {
+  const show = window.APP_CONFIG.enableBurgerMenu !== false;
+  const mobileHeader = document.getElementById("mobile-nav-header");
+  const mobileMenu = document.getElementById("mobile-nav");
+  const burger = document.getElementById("menu-toggle");
+
+  if (!mobileHeader || !mobileMenu || !burger) return;
+
+  // Burger aus → mobile Menü dauerhaft sichtbar
+  if (!show) {
+    mobileHeader.classList.add("hidden");
+    burger.classList.add("hidden");
+    mobileMenu.classList.remove("hidden");
+  } else {
+    mobileHeader.classList.remove("hidden");
+    burger.classList.remove("hidden");
+  }
+}
+
+/* ---------------------------
+   Aktiven Link hervorheben
+---------------------------- */
 function setActiveNavigation() {
   const current = window.location.pathname.split("/").pop() || "index.html";
-  document.querySelectorAll("#main-nav .nav-link").forEach(link => {
+
+  document.querySelectorAll("#desktop-nav a, #mobile-nav a").forEach(link => {
     const active = link.getAttribute("href") === current;
-    link.classList.remove("bg-blue-600", "bg-gray-900", "text-white", "hover:bg-blue-700", "hover:bg-gray-900");
-    if (active) link.classList.add("bg-gray-900", "text-white", "hover:bg-gray-900");
-    else link.classList.add("bg-blue-600", "text-white", "hover:bg-blue-700");
+    link.classList.remove("bg-blue-600","bg-gray-900","text-white","hover:bg-blue-700","hover:bg-gray-900");
+
+    if (active) {
+      link.classList.add("bg-gray-900","text-white","hover:bg-gray-900");
+    } else {
+      link.classList.add("bg-blue-600","text-white","hover:bg-blue-700");
+    }
   });
 }
 
-/* Breadcrumb */
+/* ---------------------------
+   Breadcrumb
+---------------------------- */
 function setBreadcrumb() {
-  if (window.APP_CONFIG?.showBreadcrumb === false) {
+  if (window.APP_CONFIG.showBreadcrumb === false) {
     const bc = document.getElementById("breadcrumb");
     if (bc) bc.remove();
     return;
   }
+
   const current = window.location.pathname.split("/").pop() || "index.html";
-  const label = window.APP_CONFIG?.pages?.[current]?.title || current;
+  const label = window.APP_CONFIG.pages[current]?.title || current;
   const el = document.getElementById("breadcrumb");
+
   if (el) el.innerHTML = `<span class="text-gray-700 font-medium">${label}</span>`;
 }
 
-/* Sichtbare Titel */
+/* ---------------------------
+   Titel
+---------------------------- */
 function setAppTitle() {
   const el = document.getElementById("app-title");
-  if (el) el.textContent = window.APP_CONFIG?.appTitle || document.title || "Web-App";
+  if (el) el.textContent = window.APP_CONFIG.appTitle;
 }
 
 function setVisiblePageTitle() {
   const el = document.getElementById("page-title");
-  if (!el) return;
   const current = window.location.pathname.split("/").pop() || "index.html";
-  const label = window.APP_CONFIG?.pages?.[current]?.title || current;
-  el.textContent = label;
+  const label = window.APP_CONFIG.pages[current]?.title;
+  if (el && label) el.textContent = label;
 }
 
-/* Tab-Titel */
 function setTabTitle() {
   const current = window.location.pathname.split("/").pop() || "index.html";
-  const app = window.APP_CONFIG?.appTitle || "Web-App";
-  const page = window.APP_CONFIG?.pages?.[current]?.title || current;
+  const app = window.APP_CONFIG.appTitle;
+  const page = window.APP_CONFIG.pages[current]?.title || current;
   document.title = `${page} – ${app}`;
 }
 
-/* Burger-Config anwenden */
-function applyBurgerConfig() {
-  const enabled = window.APP_CONFIG?.enableBurgerMenu !== false; // default: an
-  const btn = document.getElementById("menu-toggle");
-  const nav = document.getElementById("main-nav");
-  if (!btn || !nav) return;
-
-  if (!enabled) {
-    // Burger-Button verstecken, Menü immer sichtbar machen
-    btn.classList.add("hidden");
-    nav.classList.remove("hidden");
-  } else {
-    // Standard: mobil hidden, Desktop sichtbar (md:flex in HTML vorhanden)
-    btn.classList.remove("hidden");
-    // auf kleinen Screens initial einklappen
-    if (window.matchMedia("(max-width: 767px)").matches) nav.classList.add("hidden");
-  }
-}
-
-function applyMenuVisibility() {
-  const cfg = window.APP_CONFIG;
-  const nav = document.getElementById("main-nav");
-  const mobileHeader = document.getElementById("mobile-nav-header");
-  const burger = document.getElementById("menu-toggle");
-
-  if (!cfg || !nav || !mobileHeader || !burger) return;
-
-  // Wenn Menü global deaktiviert ist → alles entfernen
-  if (cfg.enableMenu === false) {
-    nav.classList.add("hidden");
-    mobileHeader.classList.add("hidden");
-    burger.classList.add("hidden");
-  }
-}
-
-/* Burger-Interaktion */
+/* ---------------------------
+   Burger-Menü Interaktion
+---------------------------- */
 function setupMenuToggle() {
   const btn = document.getElementById("menu-toggle");
-  const nav = document.getElementById("main-nav");
-  if (!btn || !nav) return;
-
+  const mobileMenu = document.getElementById("mobile-nav");
+  if (!btn || !mobileMenu) return;
   btn.addEventListener("click", () => {
-    const expanded = btn.getAttribute("aria-expanded") === "true";
-    btn.setAttribute("aria-expanded", expanded ? "false" : "true");
-    nav.classList.toggle("hidden");
+    mobileMenu.classList.toggle("hidden");
   });
 }
 
+/* ---------------------------
+   Inhaltsübersicht auf Index
+---------------------------- */
 function buildTableOfContents() {
-  const cfg = window.APP_CONFIG;
   const toc = document.getElementById("toc");
-  if (!cfg || !cfg.pages || !toc) return;
+  const cfg = window.APP_CONFIG;
+  if (!toc || !cfg || !cfg.pages) return;
 
   toc.innerHTML = `
     <h2 class="text-lg font-semibold text-gray-800 mb-3">Bereiche</h2>
@@ -155,7 +174,6 @@ function buildTableOfContents() {
     card.href = file;
     card.className =
       "block rounded-xl p-4 shadow-sm transition border border-gray-200 bg-gray-50 hover:bg-gray-100 hover:shadow-md";
-
     card.innerHTML = `
       <div class="text-gray-800 font-medium">${page.title}</div>
       <div class="text-sm text-gray-500 mt-1">Weiter zum Bereich</div>
@@ -163,4 +181,3 @@ function buildTableOfContents() {
     grid.appendChild(card);
   });
 }
-
