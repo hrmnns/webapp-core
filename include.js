@@ -38,18 +38,22 @@ function buildNavigation() {
   Object.entries(cfg.pages).forEach(([file, page]) => {
     if (page.showInNav === false) return;
 
-    const btn = document.createElement("a");
-    btn.href = file;
-    btn.textContent = page.title;
-    btn.className = "block px-5 py-2.5 rounded-xl shadow-sm transition";
+    // Desktop menu entry
+    const d = document.createElement("a");
+    d.href = file;
+    d.textContent = page.title;
+    d.className = "block px-5 py-2.5 rounded-xl shadow-sm transition";
+    desktop.appendChild(d);
 
-    desktop.appendChild(btn.cloneNode(true));
-    mobile.appendChild(btn.cloneNode(true));
+    // Mobile menu entry
+    const m = d.cloneNode(true);
+    mobile.appendChild(m);
   });
 
-  // Sicherheitsnetz: falls ein Icon irgendwo reingerutscht wäre → entfernen
+  // Falls doch irgendwo ein Icon reinrutscht → hart entfernen
   mobile.querySelectorAll("img").forEach(img => img.remove());
 }
+
 
 
 
@@ -171,10 +175,12 @@ function setupMenuToggle() {
   const btn = document.getElementById("menu-toggle");
   const mobileMenu = document.getElementById("mobile-nav");
   if (!btn || !mobileMenu) return;
+
   btn.addEventListener("click", () => {
     mobileMenu.classList.toggle("hidden");
   });
 }
+
 
 /* ---------------------------
    Inhaltsübersicht auf Index

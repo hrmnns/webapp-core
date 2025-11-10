@@ -1,10 +1,13 @@
 <nav class="bg-white border-b border-gray-200">
 
-  <!-- MOBILE HEADER (Icon + Burger) -->
-  <div id="mobile-nav-header" class="max-w-4xl mx-auto flex items-center justify-between px-4 py-3 md:hidden">
+  <!-- Mobile Header: Icon + Burger -->
+  <div id="mobile-nav-header" class="flex items-center justify-between px-4 py-3 md:hidden border-b border-gray-200">
     <a href="index.html" class="flex-shrink-0">
-      <img src="https://www.cherware.de/wp-content/uploads/2025/09/cropped-iconme03.png" alt="App Icon"
-        class="w-9 h-9 rounded-lg shadow-sm object-cover">
+      <img 
+        src="https://www.cherware.de/wp-content/uploads/2025/09/cropped-iconme03.png"
+        alt="App Icon"
+        class="w-9 h-9 rounded-lg shadow-sm"
+      >
     </a>
 
     <button id="menu-toggle" class="text-gray-700 text-2xl px-2 py-1" type="button">
@@ -12,16 +15,10 @@
     </button>
   </div>
 
-  <!-- DESKTOP NAVIGATION -->
+  <!-- Desktop Navigation -->
   <div id="desktop-nav" class="hidden justify-center gap-4 py-3"></div>
 
-  <!-- MOBILE DROPDOWN NAVIGATION -->
-  <div id="mobile-nav-header" class="max-w-4xl mx-auto flex items-center justify-between px-4 py-3"></div>
+  <!-- Mobile Dropdown Navigation (Links ONLY, no icon here) -->
+  <div id="mobile-nav" class="hidden flex-col gap-2 px-4 pb-3"></div>
 
-    <style>
-      #mobile-nav-header {
-        border-bottom: 1px solid #e5e7eb;
-        /* Tailwind border-gray-200 */
-      }
-    </style>
 </nav>
