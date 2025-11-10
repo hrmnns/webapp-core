@@ -1,4 +1,4 @@
-# Cherware Web-App Framework (HTML / JavaScript / Tailwind)
+# Web-App Framework (HTML / JavaScript / Tailwind)
 
 Dieses Framework bietet eine einfache Grundlage zur Entwicklung kleiner, modular aufgebauter Web-Apps
 (z. B. Entscheidungsbäume, Analyse-Tools, Nachschlagehilfen).
