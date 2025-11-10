@@ -2,7 +2,8 @@
 
 async function loadComponents() {
   const includeElements = document.querySelectorAll('[data-include]');
-
+  
+  // 1) Komponenten vollständig laden
   await Promise.all(Array.from(includeElements).map(async (element) => {
     const file = element.getAttribute("data-include");
     const response = await fetch(file);
@@ -10,12 +11,12 @@ async function loadComponents() {
     element.innerHTML = html;
   }));
 
+  // 2) Erst jetzt arbeiten wir mit dem Header & Navigation
   buildNavigation();
   setActiveNavigation();
   setBreadcrumb();
-  setAppTitle();
-  setPageTitle(); 
-  setVisiblePageTitle();
+  setAppTitle();          // <--- jetzt richtig platziert
+  setVisiblePageTitle();  // <--- jetzt richtig platziert
   setupMenuToggle();
 }
 
