@@ -10,6 +10,7 @@ async function loadComponents() {
 
   buildNavigation();
   applyBurgerConfig();
+  applyMenuVisibility();
   setActiveNavigation();
   setBreadcrumb();
   setAppTitle();
@@ -104,6 +105,23 @@ function applyBurgerConfig() {
     if (window.matchMedia("(max-width: 767px)").matches) nav.classList.add("hidden");
   }
 }
+
+function applyMenuVisibility() {
+  const cfg = window.APP_CONFIG;
+  const nav = document.getElementById("main-nav");
+  const mobileHeader = document.getElementById("mobile-nav-header");
+  const burger = document.getElementById("menu-toggle");
+
+  if (!nav || !mobileHeader || !burger || !cfg) return;
+
+  if (cfg.enableMenu === false) {
+    // Menü komplett ausblenden (mobil + desktop)
+    nav.classList.add("hidden");
+    mobileHeader.classList.add("hidden");
+    burger.classList.add("hidden");
+  }
+}
+
 
 /* Burger-Interaktion */
 function setupMenuToggle() {
