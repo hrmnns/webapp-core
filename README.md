@@ -1,75 +1,146 @@
-# Web-App Framework (HTML / JavaScript / Tailwind)
+# WebApp Core Framework
 
-Dieses Framework bietet eine einfache Grundlage zur Entwicklung kleiner, modular aufgebauter Web-Apps
-(z. B. Entscheidungsbäume, Analyse-Tools, Nachschlagehilfen).
-Es ist bewusst leichtgewichtig gehalten und benötigt **keine Build-Tools**, kein Node, kein Backend und
-keine Frameworks wie React oder Vue.
+Ein leichtgewichtiges Framework zur Entwicklung kleiner Web-Apps (Entscheidungstools, Fragebäume,
+Analyseseiten etc.) ausschließlich mit HTML und JavaScript.  
+Keine Build-Tools, kein Backend, keine Abhängigkeiten.  
+Die Apps können direkt als statische Seiten gehostet werden (z. B. GitHub Pages, S3, Unternehmens-Intranet).
 
-## Idee
-Viele kleine Web-Tools bestehen aus denselben Bausteinen:
-- ein gemeinsamer Header mit Titel und Branding
-- eine Navigation zwischen Unterseiten
-- ein Footer / Hinweisbereich
-- wiederkehrende Layout- und UI-Elemente
+---
 
-Normalerweise werden diese Elemente in jeder HTML-Datei dupliziert.
-Dieses Framework trennt stattdessen **Struktur** (Seiten) und **Komponenten** (Header, Navigation, Footer).
-So bleibt die App übersichtlich und gut erweiterbar.
+## Grundidee
 
-## Funktionsumfang
-- Zentrale **Konfigurationsdatei (`config.js`)** für:
-  - Seitentitel
-  - Navigationsstruktur
-  - Anzeigeoptionen
-- Komponenten werden dynamisch geladen (`include.js`)
-- Navigation erstellt sich automatisch aus der Konfiguration
-- Aktiver Bereich wird automatisch hervorgehoben
-- Unterstützt **Responsive Design** (Desktop + Mobile, inkl. Burger-Menü)
-- Einheitliches Layout über Tailwind CSS
+Das Framework stellt wiederverwendbare Bausteine bereit:
 
-## Struktur
+| Datei | Aufgabe |
+|---|---|
+| `lib/components/header.html` | Einheitlicher Header mit App-Titel |
+| `lib/components/nav-main.html` | Navigation (Desktop + Mobile / Burger-Menü) |
+| `lib/components/footer.html` | Footer mit Branding / Link |
+| `lib/include.js` | Logik für Navigation, Seitentitel, Breadcrumb, „Zurück“-Button usw. |
+
+Neue Web-Apps definieren nur Inhalte und Struktur:
+
+| Datei (pro App) | Aufgabe |
+|---|---|
+| `index.html` | Startseite / Inhaltsübersicht |
+| `subX.html` | Unterseiten / Module |
+| `config.js` | App-Konfiguration (Titel, Navigation usw.) |
+
+---
+
+## CDN-Einbindung
+
+Stabile Version `v1` des Frameworks:
 
 ```
-/webapp
-│ index.html
-│ sub1.html
-│ sub2.html
-│ config.js
-│ include.js
-│
-└── components/
-    header.html
-    nav-main.html
-    breadcrumb.html
-    footer.html
+https://hrmnns.github.io/webapp-core/versions/v1/lib/
 ```
 
-## Nutzung
+Einbinden in jeder HTML-Seite:
 
-1. Projekt lokal speichern
-2. Web-App **nicht per Doppelklick**, sondern über einen lokalen Webserver starten  
-   (z. B. in VS Code → „Open with Live Server“ oder Terminal):
-   ```
-   python -m http.server 8000
-   ```
-   Aufruf im Browser:
-   ```
-   http://localhost:8000/
-   ```
-3. In `config.js` Seitennamen und Navigation bearbeiten:
-   ```javascript
-   pages: {
-     "index.html": { title: "Startseite", showInNav: true },
-     "sub1.html": { title: "Tool 1", showInNav: true }
-   }
-   ```
-4. Neue Unterseite? → HTML-Datei anlegen + in `config.js` eintragen.  
-   Keine Änderungen an Navigation oder Header nötig.
+```html
+<script src="config.js"></script>
+<script src="https://hrmnns.github.io/webapp-core/versions/v1/lib/include.js" defer></script>
+```
 
-## Erweiterbarkeit
-- Styles können direkt in `header.html` oder über Tailwind-Klassen angepasst werden.
-- Interaktive Logik wird in eigenen `script`-Abschnitten oder in `include.js` ergänzt.
-- Ideal für kleine Entscheidungsbäume, Rollenprüfungen, Fragebögen, Rechner, Micro-Lernmodule.
+---
+
+## Struktur einer Web-App
+
+Empfohlenes Projektlayout:
+
+```
+meine-webapp/
+  index.html
+  sub1.html
+  sub2.html
+  config.js
+```
+
+---
+
+## Beispiel `config.js`
+
+```javascript
+window.APP_CONFIG = {
+  appTitle: "Meine Web-App",
+  enableMenu: true,
+  enableBurgerMenu: true,
+  showBreadcrumb: true,
+
+  pages: {
+    "index.html": { title: "Startseite", showInNav: true },
+    "sub1.html":  { title: "Modul A", showInNav: true },
+    "sub2.html":  { title: "Modul B", showInNav: true }
+  }
+};
+```
+
+---
+
+## Beispiel `index.html`
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Lädt…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="config.js"></script>
+  <script src="https://hrmnns.github.io/webapp-core/versions/v1/lib/include.js" defer></script>
+</head>
+
+<body>
+
+  <div data-include="https://hrmnns.github.io/webapp-core/versions/v1/lib/components/header.html"></div>
+  <div data-include="https://hrmnns.github.io/webapp-core/versions/v1/lib/components/nav-main.html"></div>
+
+  <main class="max-w-4xl mx-auto p-4">
+    <h2 id="page-title"></h2>
+    <div id="toc"></div> <!-- Inhaltsverzeichnis wird automatisch erzeugt -->
+  </main>
+
+  <div data-include="https://hrmnns.github.io/webapp-core/versions/v1/lib/components/footer.html"></div>
+
+</body>
+</html>
+```
+
+---
+
+## Beispiel `sub1.html`
+
+```html
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8">
+  <title>Lädt…</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script src="config.js"></script>
+  <script src="https://hrmnns.github.io/webapp-core/versions/v1/lib/include.js" defer></script>
+</head>
+
+<body>
+
+  <div data-include="https://hrmnns.github.io/webapp-core/versions/v1/lib/components/header.html"></div>
+  <div data-include="https://hrmnns.github.io/webapp-core/versions/v1/lib/components/nav-main.html"></div>
+
+  <main class="max-w-4xl mx-auto p-4">
+    <h2 id="page-title"></h2>
+
+    <!-- Eigene Inhalte -->
+    <p>Hier steht das Modul A.</p>
+  </main>
+
+  <div data-include="https://hrmnns.github.io/webapp-core/versions/v1/lib/components/footer.html"></div>
+
+</body>
+</html>
+```
+
+---
 
 ## Lizenz
-Dieses Framework darf frei genutzt, angepasst und erweitert werden.
+MIT
