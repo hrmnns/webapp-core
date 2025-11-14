@@ -3,7 +3,7 @@
 **Ein leichtgewichtiges Framework zur Entwicklung kleiner Web-Apps (Entscheidungstools, Fragebäume, Analyseseiten etc.) ausschließlich mit HTML und JavaScript.** Keine Build-Tools, kein Backend, keine Abhängigkeiten. Die Apps können direkt als statische Seiten gehostet werden (z. B. GitHub Pages, S3, Unternehmens-Intranet).
 
 ## Release Notes  
-### v1.0.0 – 2025‑11‑14  
+### v1.5.0 – 2025‑11‑14  
 - Initiale Veröffentlichung des Frameworks  
 - Komponenten:
   - `lib/components/header.html` – Einheitlicher Header mit App‑Titel  
