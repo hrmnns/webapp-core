@@ -155,11 +155,28 @@ function setAppTitle() {
 }
 
 function setVisiblePageTitle() {
-  const el = document.getElementById("page-title");
   const current = window.location.pathname.split("/").pop() || "index.html";
-  const label = window.APP_CONFIG.pages[current]?.title;
-  if (el && label) el.textContent = label;
+  const pageConfig = window.APP_CONFIG.pages[current];
+
+  const elTitle = document.getElementById("page-title");
+  const elSubtitle = document.getElementById("page-subtitle");
+
+  // 1. Titel setzen (Pflicht)
+  if (elTitle && pageConfig?.title) {
+    elTitle.textContent = pageConfig.title;
+  }
+
+  // 2. Untertitel setzen (optional)
+  if (elSubtitle) {
+    if (pageConfig?.subtitle) {
+      elSubtitle.textContent = pageConfig.subtitle;
+      elSubtitle.classList.remove("hidden");
+    } else {
+      elSubtitle.classList.add("hidden");
+    }
+  }
 }
+
 
 function setTabTitle() {
   const current = window.location.pathname.split("/").pop() || "index.html";
